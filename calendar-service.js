@@ -1,7 +1,8 @@
 require('ical.js');
 var fs = require('fs');
-var holidays;
-exports.dayTypes={WEEKEND:0, HOLIDAY:1, WEEKDAY:3};
+
+exports.holidays=new Set();
+exports.dayTypes={WEEKEND:0, HOLIDAY:1, WEEKDAY:2};
 
 exports.loadCalendar =function(){
     var fileContent;
@@ -9,23 +10,40 @@ exports.loadCalendar =function(){
         if (err) throw err;
         fileContent=data;
         console.log("read calendar file data");
-        var luxCal=new ICAL.parse(fileContent);
-        console.log("Luxembourg calendar loaded");
+        var luxCal=new ICAL.parse(fileContent);        
         this.interpretCalendar(luxCal);
+        console.log("Luxembourg calendar loaded, number of holidays found: "+exports.holidays.size);
     });   
 }
 
-interpretCalendar = function (luxCal){
+exports.interpretCalendar = function (luxCal){    
+    exports.holidays.clear();
     var comp = new ICAL.Component(luxCal);
     //icaljs not very useful here, we have to iterate into each event to find full list of holidays...
     var events=comp.getAllSubcomponents("vevent");
     for(i in events){
         var vevent=events[i];
         var start=vevent.getFirstPropertyValue("dtstart");
+        var startDate=new Date(start);
+        startDate.setHours(0,0,0,0);
         var end=vevent.getFirstPropertyValue("dtend");
-        console.log("interpreting event "+JSON.stringify(vevent)+": start="+start+", end="+end);
+        var endDate=new Date(end);
+        endDate.setHours(0,0,0,0);
+        //console.log("interpreting event "+JSON.stringify(vevent)+": start="+startDate+", end="+endDate);
+        //adding dates from start to end (exclusive) into list of holidays
+        var date=startDate;
         
+        while(date.getTime()<endDate.getTime()){
+            exports.holidays.add(date+"");
+            //console.log("added date "+date);
+            //next day
+            date=new Date(date.getTime());
+            date.setDate( date.getDate() + 1);             
+            date.setHours(0,0,0,0);
+        }
     }
+    console.log("loaded holidays, size="+exports.holidays.size);
+    for (let value of exports.holidays) console.log("holiday: "+value);
 }
 
 /*parseDate = function(dateString){
@@ -43,10 +61,11 @@ exports.getTypeOfDay=function(date){
     }
     else{
         //check calendar to see if public or school holiday
-        var time=ICAL.Time.fromJSDate(date);
-        console.log("time="+JSON.stringify(time));
-        //luxCal.getFirstSubcomponent
-        //var comp = new ICAL.Component(jcalData);
-        //var vevent = comp.getFirstSubcomponent("vevent");
+        if(exports.holidays.has(date+"")){
+            return exports.dayTypes.HOLIDAY;            
+        }
+        else{
+            return exports.dayTypes.WEEKDAY;
+        }
     }
 }
