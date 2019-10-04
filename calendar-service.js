@@ -11,7 +11,7 @@ exports.loadCalendar =function(){
         fileContent=data;
         console.log("read calendar file data");
         var luxCal=new ICAL.parse(fileContent);        
-        this.interpretCalendar(luxCal);
+        exports.interpretCalendar(luxCal);
         console.log("Luxembourg calendar loaded, number of holidays found: "+exports.holidays.size);
     });   
 }
@@ -43,7 +43,7 @@ exports.interpretCalendar = function (luxCal){
         }
     }
     console.log("loaded holidays, size="+exports.holidays.size);
-    for (let value of exports.holidays) console.log("holiday: "+value);
+    //for (let value of exports.holidays) console.log("holiday: "+value);
 }
 
 /*parseDate = function(dateString){
