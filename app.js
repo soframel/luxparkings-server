@@ -78,10 +78,39 @@ function getAverageFullTime(dateS, parking, res){
   const date=new Date(dateS);
   const type=calService.getTypeOfDay(date);
   console.log("type of date="+type);
-
+  //find previous similar dates
+  const dates=calService.getPreviousSimilarDates(date,type);
+  //elastic query
+  const esEntries=elastic.getCompleteTimesForSimilarDatesInParking(dates, parking).then(function(result){
+    if(result.statusCode==200){
+      console.log("received parkings: "+JSON.stringify(result))
+            
+      res.statusCode=200;
+      //res.setHeader('Content-Type', 'application/json');        
+      //var json="{ \"parkings\": "+JSON.stringify(parkings)+"}";
+      //console.log("parkings json="+json);
+      res.end("This is a "+type+": results="+JSON.stringify(result.body)); 
+      res.end(json);
+    }
+    else{
+        console.log("error code: "+result.statusCode+": "+JSON.stringify(result));
+        res.statusCode=500;
+        res.end("an error occured");
+    }
+  }).catch(function(error){
+    console.log("error: "+JSON.stringify(error));
+        res.statusCode=500;
+        res.end("an error occured");
+  });
 
   
-  res.statusCode=200;
-  res.setHeader('Content-Type', 'text/plain');
-    res.end("This is a "+type); 
+
+  //result as JSON: 
+  /**
+   * {
+   *  dateType: WEEKDAY, WEEKEND or HOLIDAY,
+   *  averageFullTime: 8:43
+   * }
+   */
+
 }

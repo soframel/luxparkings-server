@@ -69,3 +69,28 @@ exports.getTypeOfDay=function(date){
         }
     }
 }
+
+/**
+ * return a list of previous dates in similar context
+ */
+exports.getPreviousSimilarDates= function(date, type){
+    const maxEntries=20;
+    const maxDates=365;
+    const isHoliday=(type==exports.dayTypes.HOLIDAY);
+    //find same week days in holidays calendar, starting with date - 1 week
+    var current=new Date(date);
+    current.setDate(date.getDate()-7);
+    var dates=new Set();
+    var counter=0;
+    while(dates.size<maxEntries && counter<maxDates){
+        if((isHoliday && exports.holidays.has(current+""))
+            || !isHoliday && !exports.holidays.has(current+"")){
+                dates.add(current);
+        }
+        counter++;
+        var nextDate=new Date(current);
+        nextDate.setDate(current.getDate()-7);
+        current=nextDate;
+    }
+    return dates;
+}
