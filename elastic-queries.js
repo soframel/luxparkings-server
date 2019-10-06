@@ -31,7 +31,37 @@ exports.getParkingNames=function() {
     });   
 }
 
-exports.getCompleteTimesForSimilarDatesInParking=function(listOfDates, parkingName){
+exports.getAverageFullTime=async function(similarDates, parking){
+  
+  //elastic query
+  //const esEntries=getCompleteTimesForSimilarDatesInParking(similarDates, parking).then(function(result){
+  var result=await getCompleteTimesForSimilarDatesInParking(similarDates, parking);
+  try{
+    if(result.statusCode==200){
+      console.log("received parkings: "+JSON.stringify(result))
+      const hits=result.body.hits.hits;
+      var map=getMapOfFirstTimeFullByDay(hits);
+      console.log("interpreted results into a map a times");
+      //+map.keys.forEach(function(value, index, array){console.log(value+"="+map.get(value))}));
+
+      //calculate average for every day
+      return 42;
+    }
+    else{
+        console.log("error code: "+result.statusCode+": "+JSON.stringify(result));
+        return null;
+    }
+  //}).catch(function(error){
+  }catch(error){
+    console.log("received an error: "+JSON.stringify(error));
+    return null;
+  }; //)
+};
+
+/**
+ * call elasticsearch to get entries for similar dates in given parking
+ */
+async function getCompleteTimesForSimilarDatesInParking(listOfDates, parkingName){
   var datesRanges=[];
   for(let date of listOfDates.values()){
     var dateS=dateFormat(date, "yyyy-mm-dd");
@@ -47,7 +77,7 @@ exports.getCompleteTimesForSimilarDatesInParking=function(listOfDates, parkingNa
     });   
   }
 
-  return client.search({
+  return await client.search({
     "index": index,
     "body": {
       "query": {      
@@ -67,7 +97,7 @@ exports.getCompleteTimesForSimilarDatesInParking=function(listOfDates, parkingNa
             {
               "term": {
                 "parkingName": {
-                  "value": "Bouillon"
+                  "value": parkingName
                 }
               }
             }], 
@@ -80,3 +110,27 @@ exports.getCompleteTimesForSimilarDatesInParking=function(listOfDates, parkingNa
 }
 }); 
 };  
+
+
+/**
+ * interpret elastic result hits to return a map of (day -> minimum full time)
+ */
+function getMapOfFirstTimeFullByDay(hits){
+  var map=new Map();
+  hits.forEach(function(value, index, array){
+    const dateS=value._source.postDate;
+    const time=parseInt(value._source.time);
+    var date=new Date(dateS);
+    date.setHours(0,0,0,0);
+    if(map.has(date)){
+      const otherTime=map.get(date);
+      if(time<otherTime){
+        map.set(date, time);        
+      }
+    }
+    else{
+      map.set(date, time)
+    }
+  });
+  return map;
+}

@@ -81,36 +81,25 @@ function getAverageFullTime(dateS, parking, res){
   //find previous similar dates
   const dates=calService.getPreviousSimilarDates(date,type);
   //elastic query
-  const esEntries=elastic.getCompleteTimesForSimilarDatesInParking(dates, parking).then(function(result){
-    if(result.statusCode==200){
-      console.log("received parkings: "+JSON.stringify(result))
-            
-      res.statusCode=200;
-      //res.setHeader('Content-Type', 'application/json');        
-      //var json="{ \"parkings\": "+JSON.stringify(parkings)+"}";
-      //console.log("parkings json="+json);
-      res.end("This is a "+type+": results="+JSON.stringify(result.body)); 
-      res.end(json);
+  elastic.getAverageFullTime(dates, parking).then(function(average){
+    if(average>0){
+      console.log("average="+average)
+
+      res.setHeader('Content-Type', 'application/json');        
+      var result={
+        dayType: type,
+        averageTime: average
+      };      
+      res.end(JSON.stringify(result));
     }
     else{
-        console.log("error code: "+result.statusCode+": "+JSON.stringify(result));
+        console.log("average not found");
         res.statusCode=500;
-        res.end("an error occured");
+        res.end("average not found");
     }
   }).catch(function(error){
-    console.log("error: "+JSON.stringify(error));
+    console.log("an error occured: "+error);
         res.statusCode=500;
-        res.end("an error occured");
+        res.end("an error occured: "+error);
   });
-
-  
-
-  //result as JSON: 
-  /**
-   * {
-   *  dateType: WEEKDAY, WEEKEND or HOLIDAY,
-   *  averageFullTime: 8:43
-   * }
-   */
-
 }
