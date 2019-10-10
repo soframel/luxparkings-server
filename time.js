@@ -22,11 +22,11 @@ exports.getAverageWithoutOutliers=function (minutes){
         //only keep values between 1 hour less & 1 hour more to median
         if(m>=median-60 && m <= median+60){
             finalSorted.push(m);
-            console.log("keeping "+m)
+            //console.log("keeping "+m)
         }
-        else{
+        /*else{
             console.log("trimming "+m);
-        }
+        }*/
     }
 
     //calculate average
@@ -35,7 +35,7 @@ exports.getAverageWithoutOutliers=function (minutes){
         sum += finalSorted[i];
     }
     var avgMinutes = sum/finalSorted.length;
-    console.log("trimmed average="+avgMinutes);
+    //console.log("trimmed average="+avgMinutes);
     return avgMinutes;
 }
 
@@ -50,7 +50,7 @@ exports.getMinutesFromTime= function(time){
     const hour=parseInt(timeS.substr(0, 2), 10);
     const minutes=parseInt(timeS.substr(2,4), 10);
     const result= (hour*60)+minutes;
-    console.log("getMinutesFromTime for "+time+": "+result);
+    //console.log("getMinutesFromTime for "+time+": "+result);
     return result;
 }
 
@@ -63,6 +63,6 @@ exports.getTimeStringFromMinutes=function (minutes){
     const mins = minutes % 60;
     const minsString=(mins<10)?"0"+mins:mins;
     const time=hoursString+":"+minsString;
-    console.log("average "+minutes+" converted to "+time);
+    //console.log("minutes "+minutes+" converted to "+time);
     return time;
 }

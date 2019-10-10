@@ -85,6 +85,7 @@ async function getCompleteTimesForSimilarDatesInParking(listOfDates, parkingName
   return await client.search({
     "index": index,
     "body": {
+      "size": 1000,
       "query": {      
     "bool": {
       "must": [
@@ -105,7 +106,16 @@ async function getCompleteTimesForSimilarDatesInParking(listOfDates, parkingName
                   "value": parkingName
                 }
               }
-            }], 
+            }
+            , 
+            {
+              "range":{
+                "message.ouvert":{
+                  "gte": 1
+                }
+              }  
+            }          
+          ], 
           "should": datesRanges,
           "minimum_should_match" : 1
         }

@@ -82,7 +82,7 @@ function getAverageFullTime(dateS, parking, res){
   const dates=calService.getPreviousSimilarDates(date,type);
   //elastic query
   elastic.getAverageFullTime(dates, parking).then(function(average){
-    if(average>0){
+    if(average!=null){
       console.log("average="+average)
 
       res.setHeader('Content-Type', 'application/json');        

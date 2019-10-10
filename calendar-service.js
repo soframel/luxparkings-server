@@ -34,7 +34,7 @@ exports.interpretCalendar = function (luxCal){
         var date=startDate;
         
         while(date.getTime()<endDate.getTime()){
-            exports.holidays.add(date+"");
+            exports.holidays.add(date.getTime());
             //console.log("added date "+date);
             //next day
             date=new Date(date.getTime());
@@ -61,7 +61,7 @@ exports.getTypeOfDay=function(date){
     }
     else{
         //check calendar to see if public or school holiday
-        if(exports.holidays.has(date+"")){
+        if(exports.holidays.has(date.getTime())){
             return exports.dayTypes.HOLIDAY;            
         }
         else{
@@ -83,8 +83,9 @@ exports.getPreviousSimilarDates= function(date, type){
     var dates=new Set();
     var counter=0;
     while(dates.size<maxEntries && counter<maxDates){
-        if((isHoliday && exports.holidays.has(current+""))
-            || !isHoliday && !exports.holidays.has(current+"")){
+        const time=current.getTime();
+        if((isHoliday && exports.holidays.has(time))
+            || !isHoliday && !exports.holidays.has(time)){
                 dates.add(current);
         }
         counter++;

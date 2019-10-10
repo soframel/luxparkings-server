@@ -5,18 +5,29 @@ var fileContent=fs.readFileSync('spec/test.ics', 'utf8');
 var luxCal=new ICAL.parse(fileContent);
 calService.interpretCalendar(luxCal);
 
-console.log("loaded holidays in tests, size="+calService.holidays.size+"-> "+JSON.stringify(calService.holidays));
+console.log("loaded holidays in tests, size="+calService.holidays.size);
 
 describe("Calendar interpretation", function(){ 
   it("test calendar size", function() {
       expect(33, calService.holidays.size);
   });
   it("load test calendar", function() {
-      expect(true, calService.holidays.has(new Date(2010,11,25)));
-      expect(false, calService.holidays.has(new Date(2011,0,3)));
-      expect(true, calService.holidays.has(new Date(2011,3,12)));
-      expect(true, calService.holidays.has(new Date(2011,3,25)));
-      expect(false, calService.holidays.has(new Date(2011,3,26)));
+      //expect(calService.holidays.has(new Date(2010,11,25))).toBe(true);
+      const date=new Date(2010,11,25);
+      date.setHours(0,0,0,0);      
+      expect(calService.holidays.has(date.getTime())).toBe(true);
+      const date2=new Date(2011,0,3);
+      date2.setHours(0,0,0,0);      
+      expect( calService.holidays.has(date2.getTime())).toBe(false);
+      const date3=new Date(2011,3,12);
+      date3.setHours(0,0,0,0);      
+      expect(calService.holidays.has(date3.getTime())).toBe(true);
+      const date4=new Date(2011,3,25);
+      date4.setHours(0,0,0,0);      
+      expect(calService.holidays.has(date4.getTime())).toBe(true);
+      const date5=new Date(2011,3,26);
+      date5.setHours(0,0,0,0);      
+      expect(false, calService.holidays.has(date5)).toBe(false);
     });
   
 });
