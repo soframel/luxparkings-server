@@ -1,4 +1,5 @@
 const { Client } = require('@elastic/elasticsearch')
+var timeService=require("./time");
 var dateFormat = require('dateformat');
 
 const client = new Client(
@@ -41,11 +42,15 @@ exports.getAverageFullTime=async function(similarDates, parking){
       console.log("received parkings: "+JSON.stringify(result))
       const hits=result.body.hits.hits;
       var map=getMapOfFirstTimeFullByDay(hits);
-      console.log("interpreted results into a map a times");
+      console.log("interpreted results into a map of times");
       //+map.keys.forEach(function(value, index, array){console.log(value+"="+map.get(value))}));
+      var values=map.values();
+      var times=Array.from(values);
 
       //calculate average for every day
-      return 42;
+      const average=timeService.calculateAverageTime(times);
+      
+      return average;
     }
     else{
         console.log("error code: "+result.statusCode+": "+JSON.stringify(result));
@@ -53,7 +58,7 @@ exports.getAverageFullTime=async function(similarDates, parking){
     }
   //}).catch(function(error){
   }catch(error){
-    console.log("received an error: "+JSON.stringify(error));
+    console.log("received an error: "+error);
     return null;
   }; //)
 };
