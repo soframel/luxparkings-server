@@ -10,6 +10,16 @@ const port = 3000;
 
 const server = http.createServer((req, res) => {
     
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    if ( req.method === 'OPTIONS' ) {
+      res.writeHead(200);
+      res.end();
+      return;
+    }
+
     //get url infomation
     var urlParts = url.parse(req.url);
     console.log(req.url, urlParts);
@@ -82,21 +92,20 @@ function getAverageFullTime(dateS, parking, res){
   const dates=calService.getPreviousSimilarDates(date,type);
   //elastic query
   elastic.getAverageFullTime(dates, parking).then(function(average){
-    if(average!=null){
+    //if(average!=null){
       console.log("average="+average)
-
       res.setHeader('Content-Type', 'application/json');        
       var result={
         dayType: type,
         averageTime: average
       };      
       res.end(JSON.stringify(result));
-    }
+    /*}
     else{
         console.log("average not found");
         res.statusCode=500;
         res.end("average not found");
-    }
+    }*/
   }).catch(function(error){
     console.log("an error occured: "+error);
         res.statusCode=500;
