@@ -34,13 +34,15 @@ exports.getParkingNames=function() {
 
 exports.getAverageFullTime=async function(similarDates, parking){
   
+  console.log("getAverageFullTime for parking "+parking);
+
   //elastic query
   //const esEntries=getCompleteTimesForSimilarDatesInParking(similarDates, parking).then(function(result){
   var result=await getCompleteTimesForSimilarDatesInParking(similarDates, parking);
   try{
     if(result.statusCode==200){
-      console.log("received parkings"); //: "+JSON.stringify(result))
       const hits=result.body.hits.hits;
+      console.log("received "+hits.length+" parkings"); //: "+JSON.stringify(result))      
       var map=getMapOfFirstTimeFullByDay(hits);
       //console.log("interpreted results into a map of times");
       //+map.keys.forEach(function(value, index, array){console.log(value+"="+map.get(value))}));

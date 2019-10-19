@@ -61,7 +61,9 @@ exports.getTypeOfDay=function(date){
     }
     else{
         //check calendar to see if public or school holiday
-        if(exports.holidays.has(date.getTime())){
+        date.setHours(0,0,0,0);
+        const time=date.getTime();
+        if(exports.holidays.has(time)){
             return exports.dayTypes.HOLIDAY;            
         }
         else{
