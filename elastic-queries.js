@@ -2,12 +2,20 @@ const { Client } = require('@elastic/elasticsearch')
 var timeService=require("./time");
 var dateFormat = require('dateformat');
 
+const username=process.env.ELASTIC_USERNAME;
+const password=process.env.ELASTIC_PASSWORD;
+console.log("loaded username & password from command line: "+username);
+if(!username || !password){
+  console.log("No username or password for Elastic. Exiting");
+  process.exit(1);
+}
+
 const client = new Client(
   { 
     node: 'http://localhost:9200', 
     auth: {
-      username: 'reader',
-      password: 'reader'
+      username: username,
+      password: password
     } 
   });
 
