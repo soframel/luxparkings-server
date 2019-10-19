@@ -39,10 +39,10 @@ exports.getAverageFullTime=async function(similarDates, parking){
   var result=await getCompleteTimesForSimilarDatesInParking(similarDates, parking);
   try{
     if(result.statusCode==200){
-      console.log("received parkings: "+JSON.stringify(result))
+      console.log("received parkings"); //: "+JSON.stringify(result))
       const hits=result.body.hits.hits;
       var map=getMapOfFirstTimeFullByDay(hits);
-      console.log("interpreted results into a map of times");
+      //console.log("interpreted results into a map of times");
       //+map.keys.forEach(function(value, index, array){console.log(value+"="+map.get(value))}));
       var values=map.values();
       var times=Array.from(values);

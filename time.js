@@ -61,10 +61,10 @@ exports.getTimeStringFromMinutes=function (minutes){
     if(minutes > 0 && minutes < 1440){
         const hours = Math.floor(minutes/60);
         const hoursString=(hours<10)?"0"+hours:hours;
-        const mins = minutes % 60;
+        const mins = (minutes % 60).toFixed(0);
         const minsString=(mins<10)?"0"+mins:mins;
-        const time=hoursString+":"+minsString.toFixed(0);
-        console.log("minutes "+minutes+" converted to "+time);
+        const time=hoursString+":"+minsString;
+        //console.log("minutes "+minutes+" converted to "+time);
         return time;
     }
     else{

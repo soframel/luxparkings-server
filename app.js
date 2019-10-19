@@ -97,6 +97,7 @@ function getAverageFullTime(dateS, parking, res){
       res.setHeader('Content-Type', 'application/json');        
       var result={
         dayType: type,
+        dayOfWeek: date.getDay(),
         averageTime: average
       };      
       res.end(JSON.stringify(result));
