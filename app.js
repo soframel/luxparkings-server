@@ -5,7 +5,7 @@ var calService=require("./calendar-service");
 
 calService.loadCalendar();
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0'; //use 127.0.0.1 for local tests
 const port = 3000;
 
 const server = http.createServer((req, res) => {

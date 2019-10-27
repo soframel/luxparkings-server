@@ -4,15 +4,17 @@ var dateFormat = require('dateformat');
 
 const username=process.env.ELASTIC_USERNAME;
 const password=process.env.ELASTIC_PASSWORD;
+const elastic_url=process.env.ELASTIC_URL;
+
 console.log("loaded username & password from command line: "+username);
-if(!username || !password){
-  console.log("No username or password for Elastic. Exiting");
+if(!username || !password || !elastic_url){
+  console.log("No username or password or url for Elastic. Exiting");
   process.exit(1);
 }
 
 const client = new Client(
   { 
-    node: 'http://localhost:9200', 
+    node: elastic_url, 
     auth: {
       username: username,
       password: password
