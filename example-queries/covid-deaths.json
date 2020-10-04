@@ -1,0 +1,43 @@
+{
+    "size": 50,
+    "query":
+    {
+    "bool":{
+       "must":[
+           {
+             "term":{
+               "region":{
+                 "value":""
+               }
+             }
+           },
+           {
+             "range": {
+               "totalDeathsPer100kInhabitants": {
+                 "gte": 0
+               }
+             }
+           }
+         ],
+         "must_not": [
+           {"term":{
+               "country":{
+                 "value":"World"
+               }
+             }
+           }
+         ], 
+         "filter": [
+           {
+              "range":{
+                      "date":{
+                         "gte":"2020-09-01",
+                         "lte":"2020-10-04",
+                         "format":"yyyy-MM-dd"
+                      }
+                   }
+           }
+         ]
+    }
+ }
+ }

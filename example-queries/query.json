@@ -1,0 +1,111 @@
+{
+   "size": 50,
+   "query":
+   {
+     
+   "bool":{
+      "must":[
+         {
+            "range":{
+               "message.date":{
+                  "lt":3
+               }
+            }
+         }
+      ],
+      "filter":{
+         "bool":{
+            "must":[
+               {
+                  "term":{
+                     "parkingName":{
+                        "value":"Luxembourg Sud A+B"
+                     }
+                  }
+               }, 
+               {
+               "range":{
+                 "message.ouvert":{
+                   "gte": 1
+                 }
+               }  
+               }
+            ],
+            "should":[
+               {
+                  "range":{
+                     "postDate":{
+                        "gte":"2019-10-08",
+                        "lte":"2019-10-08",
+                        "format":"yyyy-MM-dd"
+                     }
+                  }
+               },
+               {
+                  "range":{
+                     "postDate":{
+                        "gte":"2019-10-01",
+                        "lte":"2019-10-01",
+                        "format":"yyyy-MM-dd"
+                     }
+                  }
+               },
+                {
+                  "range":{
+                     "postDate":{
+                        "gte":"2019-09-24",
+                        "lte":"2019-09-24",
+                        "format":"yyyy-MM-dd"
+                     }
+                  }
+               }
+            ],
+            "minimum_should_match":1
+         }
+      }
+   }
+}
+}GET covid/_search
+{
+   "size": 50,
+   "query":
+   {
+     
+   "bool":{
+      "must":[
+         {
+            "range":{
+               "message.date":{
+                  "lt":3
+               }
+            }
+         }
+      ],
+      "filter":{
+         "bool":{
+            "must":[
+               {
+                  "term":{
+                     "region":{
+                        "value":""
+                     }
+                  }
+               }
+            ],
+            "should":[
+               {
+                  "range":{
+                     "date":{
+                        "gte":"2020-09-01",
+                        "lte":"2020-10-04",
+                        "format":"yyyy-MM-dd"
+                     }
+                  }
+               }
+            ],
+            "minimum_should_match":1
+         }
+      }
+   }
+}
+}
