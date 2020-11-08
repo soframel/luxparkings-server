@@ -76,9 +76,9 @@ return client.search({
 }
 
 
-exports.getTotalDeathsPer100k = function (startDate, endDate) {
+exports.getCountryDeathsPer100k = function (startDate, endDate) {
 
-  console.log("getTotalDeaths between " + startDate + " and " + endDate);
+  console.log("getCountryDeaths between " + startDate + " and " + endDate);
 
   var date1 = dateFormat(startDate, "yyyy-mm-dd");
   var date2 = dateFormat(endDate, "yyyy-mm-dd");
@@ -95,6 +95,13 @@ return client.search({
             "range": {
               "population": {
                 "gt": 0
+              }
+            }
+          },
+          {
+            "term": {
+              "region": {
+                "value": ""
               }
             }
           }
@@ -129,7 +136,7 @@ return client.search({
 
 
 
-exports.getReanimationsPer100k = function (startDate, endDate) {
+exports.getCountryReanimationsPer100k = function (startDate, endDate) {
 
   console.log("getReanimations between " + startDate + " and " + endDate);
 
@@ -148,6 +155,13 @@ return client.search({
             "range": {
               "population": {
                 "gt": 0
+              }
+            }
+          },
+          {
+            "term": {
+              "region": {
+                "value": ""
               }
             }
           }

@@ -35,13 +35,13 @@ exports.mapTotalCasesPer100k = function (hits) {
 }
 
 
-exports.mapTotalDeathsPer100k = function (hits) {
+exports.mapCountryDeathsPer100k = function (hits) {
   console.log("mapping data")
   var result = {};
   hits.forEach(function (value, index, array) {
     console.log("mapping " + value._source.date + ", " + value._source.country)
     const date = value._source.date;
-    const data = { country: value._source.country, region: value._source.region, totalDeathsPer100kInhabitants: value._source.totalDeathsPer100kInhabitants }
+    const data = { country: value._source.country, totalDeathsPer100kInhabitants: value._source.totalDeathsPer100kInhabitants }
     console.log("data=" + JSON.stringify(data))
 
     const entry=result[date]
@@ -56,13 +56,13 @@ exports.mapTotalDeathsPer100k = function (hits) {
 }
 
 
-exports.mapReanimationsPer100k = function (hits) {
+exports.mapCountryReanimationsPer100k = function (hits) {
   console.log("mapping data")
   var result = {};
   hits.forEach(function (value, index, array) {
     console.log("mapping " + value._source.date + ", " + value._source.country)
     const date = value._source.date;
-    const data = { country: value._source.country, region: value._source.region, reanimationPer100kInhabitants: value._source.reanimationPer100kInhabitants }
+    const data = { country: value._source.country, reanimationPer100kInhabitants: value._source.reanimationPer100kInhabitants }
     console.log("data=" + JSON.stringify(data))
 
     const entry=result[date]

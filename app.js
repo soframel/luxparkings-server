@@ -46,15 +46,15 @@ const server = http.createServer((req, res) => {
       var endDate = urlParts.query.endDate;
       getCovidCountryCases(startDate, endDate, res);
       break;
-    case "/covid/totalDeaths":
+    case "/covid/countryDeaths":
         var startDate = urlParts.query.startDate;
         var endDate = urlParts.query.endDate;
-        getCovidTotalDeaths(startDate, endDate, res);
+        getCovidCountryDeaths(startDate, endDate, res);
        break;
-    case "/covid/reanimations":
+    case "/covid/countryReanimations":
         var startDate = urlParts.query.startDate;
         var endDate = urlParts.query.endDate;
-        getCovidReanimations(startDate, endDate, res);
+        getCovidCountryReanimations(startDate, endDate, res);
        break;       
     default:
       homepage(req, res);
@@ -130,13 +130,13 @@ function getCovidCountryCases(startDate, endDate, res) {
 
 
 
-function getCovidTotalDeaths(startDate, endDate, res) {
-  const map = covidelastic.getTotalDeathsPer100k(startDate, endDate).then(function (result) {
+function getCovidCountryDeaths(startDate, endDate, res) {
+  const map = covidelastic.getCountryDeathsPer100k(startDate, endDate).then(function (result) {
 
       if (result.statusCode == 200) {
         const hits = result.body.hits.hits;
         console.log("received " + hits.length + " docs");
-        var map = covidmapper.mapTotalDeathsPer100k(hits);
+        var map = covidmapper.mapCountryDeathsPer100k(hits);
         var json = JSON.stringify(map);
         console.log("returning data: " + json)
 
@@ -157,13 +157,13 @@ function getCovidTotalDeaths(startDate, endDate, res) {
 }
 
 
-function getCovidReanimations(startDate, endDate, res) {
-  const map = covidelastic.getReanimationsPer100k(startDate, endDate).then(function (result) {
+function getCovidCountryReanimations(startDate, endDate, res) {
+  const map = covidelastic.getCountryReanimationsPer100k(startDate, endDate).then(function (result) {
 
       if (result.statusCode == 200) {
         const hits = result.body.hits.hits;
         console.log("received " + hits.length + " docs");
-        var map = covidmapper.mapReanimationsPer100k(hits);
+        var map = covidmapper.mapCountryReanimationsPer100k(hits);
         var json = JSON.stringify(map);
         console.log("returning data: " + json)
 
