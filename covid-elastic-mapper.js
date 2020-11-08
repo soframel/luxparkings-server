@@ -1,5 +1,14 @@
 var dateFormat = require('dateformat');
 
+
+function sortByDate(data){
+  const ordered = {};
+  Object.keys(data).sort((d1, d2) => new Date(d1)-new Date(d2)).forEach(function(date) {
+    ordered[date] = data[date];
+  });
+  return ordered;
+}
+
 /**
  * return a object of results by date: 
  * date -> Array<{country, totalCasesPer100k}>
@@ -22,8 +31,9 @@ exports.mapTotalCasesPer100k = function (hits) {
       result[date]=[data]
     }
   });
-  return result;
+  return sortByDate(result);
 }
+
 
 exports.mapTotalDeathsPer100k = function (hits) {
   console.log("mapping data")
@@ -42,7 +52,7 @@ exports.mapTotalDeathsPer100k = function (hits) {
       result[date]=[data]
     }
   });
-  return result;
+  return sortByDate(result);
 }
 
 
@@ -63,5 +73,5 @@ exports.mapReanimationsPer100k = function (hits) {
       result[date]=[data]
     }
   });
-  return result;
+  return sortByDate(result);
 }
